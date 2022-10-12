@@ -39,10 +39,36 @@ contract DeFiFeedConsumer {
         _defiFeedAddress = addr;
     }
 
+    /**
+     * @dev Get current price of `token`
+     *
+     * In most cases you should use one of the other functions,
+     * use this if you need to implement your own custom logic on
+     * top of the raw price data.
+     *
+     * NOTE: The returned price has 18 decimal places.
+     *
+     * Requirements:
+     *
+     * - `token` must be supported by the Kenshi DeFi feed oracle.
+     */
     function getTokenPrice(address token) internal view returns (uint256) {
         return DeFiFeed(_defiFeedAddress).priceOf(token);
     }
 
+    /**
+     * @dev Get current price of `token`, following `route`.
+     *
+     * In most cases you should use one of the other functions,
+     * use this if you need to implement your own custom logic on
+     * top of the raw price data.
+     *
+     * NOTE: The returned price has 18 decimal places.
+     *
+     * Requirements:
+     *
+     * - `route` should be a valid DEX route
+     */
     function getTokenPrice(address token, DeFiFeed.Route[] memory route)
         internal
         view
@@ -64,6 +90,23 @@ contract DeFiFeedConsumer {
         _quotes[token].push(Quote(price, block.number));
     }
 
+    /**
+     * @dev Get `percent`th percentile of `token` prie, querying back
+     * `maxBlocks`. Percentile is calculated from `maxQuoteCount` samples.
+     *
+     * This function gets the price of the `token` from the Kenshi
+     * DeFi Feed oracle, stores it in the samples array, and returns
+     * the `percent`th percentile of the samples.
+     *
+     * NOTE: The returned price has 18 decimal places.
+     *
+     * Requirements:
+     *
+     * - `token` must be supported by the Kenshi DeFi feed oracle.
+     * - `percent` must be between 0 and 100
+     * - `maxBlock` should be bigger than 0
+     * - `maxQuoteCount` should be bigger than 0
+     */
     function getTokenPriceByPercentile(
         address token,
         uint256 percent,
@@ -80,6 +123,24 @@ contract DeFiFeedConsumer {
             );
     }
 
+    /**
+     * @dev Get `percent`th percentile of `token` prie, querying back
+     * `maxBlocks`, following `route`. Percentile is calculated from
+     * `maxQuoteCount` samples.
+     *
+     * This function gets the price of the `token` from the Kenshi
+     * DeFi Feed oracle, stores it in the samples array, and returns
+     * the `percent`th percentile of the samples.
+     *
+     * NOTE: The returned price has 18 decimal places.
+     *
+     * Requirements:
+     *
+     * - `percent` must be between 0 and 100
+     * - `maxBlock` should be bigger than 0
+     * - `maxQuoteCount` should be bigger than 0
+     * - `route` should be avalid DEX route
+     */
     function getTokenPriceByPercentile(
         address token,
         uint256 percent,
@@ -117,6 +178,22 @@ contract DeFiFeedConsumer {
         return _quotes[token][index].price;
     }
 
+    /**
+     * @dev Get average price of `token`, querying back `maxBlocks`.
+     * Average is calculated from `maxQuoteCount` samples.
+     *
+     * This function gets the price of the `token` from the Kenshi
+     * DeFi Feed oracle, stores it in the samples array, and returns
+     * the average of the samples.
+     *
+     * NOTE: The returned price has 18 decimal places.
+     *
+     * Requirements:
+     *
+     * - `token` must be supported by the Kenshi DeFi feed oracle.
+     * - `maxBlock` should be bigger than 0
+     * - `maxQuoteCount` should be bigger than 0
+     */
     function getTokenPriceByAverage(
         address token,
         uint256 maxBlocks,
@@ -126,6 +203,22 @@ contract DeFiFeedConsumer {
         return _getTokenPriceByAverage(token, maxBlocks, maxQuoteCount);
     }
 
+    /**
+     * @dev Get average price of `token`, querying back `maxBlocks`,
+     * following `route`. Average is calculated from `maxQuoteCount` samples.
+     *
+     * This function gets the price of the `token` from the Kenshi
+     * DeFi Feed oracle, stores it in the samples array, and returns
+     * the average of the samples.
+     *
+     * NOTE: The returned price has 18 decimal places.
+     *
+     * Requirements:
+     *
+     * - `maxBlock` should be bigger than 0
+     * - `maxQuoteCount` should be bigger than 0
+     * - `route` should be a valid DEX route
+     */
     function getTokenPriceByAverage(
         address token,
         uint256 maxBlocks,
