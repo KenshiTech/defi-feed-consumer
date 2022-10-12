@@ -1,0 +1,24 @@
+{
+  "name": "@kenshi.io/defi-feed-consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@kenshi.io/vrf-consumer": "^0.10.4",
+    "@openzeppelin/contracts": "^4.4.2"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.2",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.4",
+    "hardhat": "^2.8.3"
+  }
+}
